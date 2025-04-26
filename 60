@@ -1,150 +1,47 @@
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local ball = workspace:WaitForChild("Ball") 
-local velocityMultiplier = 1000 
-local responseSpeed = 100000 
-local hitForce = 50000 
-local reachSize = 100 
-local jumpPower = 800
+local playerName = "MOSSTESTTPS"
+local player = workspace:FindFirstChild(playerName)
+local head = player and player:FindFirstChild("Head")
+local torso = player and player:FindFirstChild("Torso")
+local leftArm = player and player:FindFirstChild("LeftArm")
+local rightArm = player and player:FindFirstChild("RightArm")
 
 
-local function adjustBallPhysics()
-       "BodyVelocity"
-    local bodyVelocity = ball:FindFirstChildOfClass("BodyVelocity")
-    if not bodyVelocity then
-        bodyVelocity = Instance.new("BodyVelocity")
-        bodyVelocity.MaxForce = Vector3.new(1e8, 1e8, 1e8) 
-        bodyVelocity.Parent = ball
-    end
-
-
-    bodyVelocity.Velocity = Vector3.new(0, 0, 0) 
-    bodyVelocity.Velocity = ball.CFrame.LookVector * velocityMultiplier * hitForce -
-    bodyVelocity.MaxForce = Vector3.new(1e8, 1e8, 1e8) 
-        "BodyGyro" 
-    local bodyGyro = ball:FindFirstChildOfClass("BodyGyro")
-    if not bodyGyro then
-        bodyGyro = Instance.new("BodyGyro")
-        bodyGyro.MaxTorque = Vector3.new(1e8, 1e8, 1e8) 
-        bodyGyro.CFrame = ball.CFrame
-        bodyGyro.Parent = ball
-    end
-
-    
-    bodyGyro.D = responseSpeed
-    bodyGyro.P = 1e8 
+if head then
+    head.CanCollide = false
+    head.CanQuery = false
+    head.CanTouch = true
+    head.Shape = Enum.PartType.Wedge
+    head.CustomPhysicalProperties = PhysicalProperties.new(1, 0.3, 0.5)
 end
 
 
-local function enhanceBodyHit(hitPart)
-    if hitPart and hitPart.Parent == character then
-     
-        local bodyVelocity = ball:FindFirstChildOfClass("BodyVelocity")
-        if bodyVelocity then
-            
-            bodyVelocity.Velocity = bodyVelocity.Velocity + (hitPart.CFrame.LookVector * velocityMultiplier * hitForce)
-            bodyVelocity.MaxForce = Vector3.new(1e8, 1e8, 1e8) 
-        end
-    end
-end
-
-                  (Reach)
-local function improveHeadAndShoulderReach()
-    local head = character:FindFirstChild("Head")
-    local leftShoulder = character:FindFirstChild("LeftUpperArm") 
-    local rightShoulder = character:FindFirstChild("RightUpperArm")
-    
-    if head then
-         "ReachPart" 
-        local reachPart = character:FindFirstChild("ReachPart")
-        if reachPart then
-            reachPart:Destroy()
-        end
-
-          "ReachPart" 
-        local reachPart = Instance.new("Part")
-        reachPart.Name = "ReachPart_Head"
-        reachPart.CanCollide = false
-        reachPart.Transparency = 1 -- 
-        reachPart.Anchored = false
-        reachPart.Massless = true
-        reachPart.Size = Vector3.new(reachSize, reachSize, reachSize)
-        reachPart.Position = head.Position
-        reachPart.Parent = character
-
-
-        local weld = Instance.new("WeldConstraint")
-        weld.Part0 = head
-        weld.Part1 = reachPart
-        weld.Parent = reachPart
-    end
-
-
-    if leftShoulder then
-
-        local reachPart = Instance.new("Part")
-        reachPart.Name = "ReachPart_Left"
-        reachPart.CanCollide = false
-        reachPart.Transparency = 1 
-        reachPart.Anchored = false
-        reachPart.Massless = true
-        reachPart.Size = Vector3.new(reachSize, reachSize, reachSize) 
-        reachPart.Position = leftShoulder.Position
-        reachPart.Parent = character
-
-
-        local weld = Instance.new("WeldConstraint")
-        weld.Part0 = leftShoulder
-        weld.Part1 = reachPart
-        weld.Parent = reachPart
-    end
-
-    if rightShoulder then
-
-        local reachPart = Instance.new("Part")
-        reachPart.Name = "ReachPart_Right"
-        reachPart.CanCollide = false
-        reachPart.Transparency = 1 
-        reachPart.Anchored = false
-        reachPart.Massless = true
-        reachPart.Size = Vector3.new(reachSize, reachSize, reachSize)
-        reachPart.Position = rightShoulder.Position
-        reachPart.Parent = character
-
-
-        local weld = Instance.new("WeldConstraint")
-        weld.Part0 = rightShoulder
-        weld.Part1 = reachPart
-        weld.Parent = reachPart
-    end
+if torso then
+    torso.CanCollide = false
+    torso.CanQuery = false
+    torso.CanTouch = true
+    torso.CustomPhysicalProperties = PhysicalProperties.new(1, 0.3, 0.5)
 end
 
 
-local function moveBallWithPlayer()
-    local hrp = character:WaitForChild("HumanoidRootPart")
-    ball.Velocity = hrp.CFrame.LookVector * velocityMultiplier * 1000
-    ball.AssemblyLinearVelocity = hrp.CFrame.LookVector * velocityMultiplier * 1000
+if leftArm then
+    leftArm.CanCollide = false
+    leftArm.CanQuery = false
+    leftArm.CanTouch = true
+    leftArm.CustomPhysicalProperties = PhysicalProperties.new(1, 0.3, 0.5)
 end
 
 
-ball.Touched:Connect(function(hit)
-    local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-    if player then
-    
-        local character = player.Character
-        if character and character:FindFirstChild("HumanoidRootPart") then
-            local distance = (character.HumanoidRootPart.Position - ball.Position).Magnitude
-            if distance <= 10 then
-          
-                enhanceBodyHit(hit)
-            end
-        end
-    end
-end)
+if rightArm then
+    rightArm.CanCollide = false
+    rightArm.CanQuery = false
+    rightArm.CanTouch = true
+    rightArm.CustomPhysicalProperties = PhysicalProperties.new(1, 0.3, 0.5)
+end
 
 
-game:GetService("RunService").Heartbeat:Connect(function()
-    adjustBallPhysics() 
-    moveBallWithPlayer() 
-    improveHeadAndShoulderReach() 
-end)
+local ball = workspace:FindFirstChild("TPSSystem") and workspace.TPSSystem:FindFirstChild("TPS")
+if ball then
+    ball.CanCollide = false
+    ball.CanQuery = false
+    ball.CanTouch = true
+end
